@@ -9,6 +9,7 @@ from pycbc.psd import interpolate, inverse_spectrum_truncation
 from pycbc.waveform import get_td_waveform
 from pycbc.filter import matched_filter
 from pycbc.waveform import apply_fseries_time_shift
+from scipy.signal import butter, filtfilt
 
 # Default values
 f_tpl = 10.0    # lower frequency for templates
@@ -79,7 +80,8 @@ def estimate_psd(data, psd_segment_length, low_freq=f1, psd_method='median', psd
 
 	return data
 
-def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2, f_tpl =f_tpl,f1=f1,f2=f2,print_info=False):
+def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2,f_tpl=f_tpl,f1=f1,f2=f2,
+					  bp=True, bpf1=f1, bpf2=f2, print_info=False):
 	
 	""" bla """
 
@@ -87,6 +89,8 @@ def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2, f_tpl =f_tpl,f1=f1,f2=f2,pr
 	sample_rate = data['H']['S'].sample_rate
 	delta_t = data['H']['S'].delta_t
 	delta_f = data['H']['S'].delta_f
+	nq = float(sample_rate)/2.
+	b, a = butter(4, [float(bpf1)/nq, float(bpf2)/nq], btype = 'bandpass')
 
 	# Find td waveform for increased precision
 	hp, hc = get_td_waveform(approximant="SEOBNRv4", 
@@ -132,6 +136,15 @@ def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2, f_tpl =f_tpl,f1=f1,f2=f2,pr
 		# Whiten residual and template
 		residual = (rtilde / data[ifo]['ST'] ** 0.5).to_timeseries()
 		tpl = (tpl / data[ifo]['ST'] **0.5).to_timeseries()
+
+		if bp:
+			if print_info:
+				print(' ')
+				print('****************************************************')
+				print('Bandpassing %s-data from %s Hz to %s Hz.' %(ifo, bpf1, bpf2))
+			data[ifo]['S']._data = filtfilt(b,a,data[ifo]['S']._data) 
+			residual._data = filtfilt(b,a,residual._data)
+			tpl._data = filtfilt(b,a,tpl._data)
 
 		data[ifo]['R'] = residual
 		data[ifo]['TPL'] = tpl
