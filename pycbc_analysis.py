@@ -80,7 +80,7 @@ def estimate_psd(data, psd_segment_length, low_freq=f1, psd_method='median', psd
 
 		# Whiten strain
 
-		data_tmp[ifo]['S'] = (data_tmp[ifo]['ST']/data_tmp[ifo]['PSD']**0.5).to_timeseries()
+		data_tmp[ifo]['WS'] = (data_tmp[ifo]['ST']/data_tmp[ifo]['PSD']**0.5).to_timeseries()
 
 	return data_tmp
 
@@ -89,9 +89,9 @@ def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2,f1=f1,f2=f2,
 	
 	""" bla """
 
-	duration = data['H']['S'].duration
-	sample_rate = data['H']['S'].sample_rate
-	delta_t = data['H']['S'].delta_t
+	duration = data['H']['WS'].duration
+	sample_rate = data['H']['WS'].sample_rate
+	delta_t = data['H']['WS'].delta_t
 	delta_f = data['H']['ST'].delta_f
 	nq = float(sample_rate)/2.
 	b, a = butter(4, [float(bpf1)/nq, float(bpf2)/nq], btype = 'bandpass')
@@ -151,7 +151,7 @@ def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2,f1=f1,f2=f2,
 				print(' ')
 				print('****************************************************')
 				print('Bandpassing %s-data from %s Hz to %s Hz.' %(ifo, bpf1, bpf2))
-			data[ifo]['S']._data = filtfilt(b,a,data[ifo]['S']._data) 
+			data[ifo]['WS']._data = filtfilt(b,a,data[ifo]['WS']._data) 
 			residual._data = filtfilt(b,a,residual._data)
 			tpl._data = filtfilt(b,a,tpl._data)
 
