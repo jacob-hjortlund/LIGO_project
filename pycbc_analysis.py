@@ -142,21 +142,28 @@ def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2,f1=f1,f2=f2,
 		# Find freq. domain residual
 		rtilde = data[ifo]['ST']-tpl
 
+		data[ifo]['R'] = rtilde.to_timeseries()
+		data[ifo]['TPL'] = tpl.to_timeseries()
+
 		# Whiten residual and template
 		residual = (rtilde / data[ifo]['PSD'] ** 0.5).to_timeseries()
 		tpl = (tpl / data[ifo]['PSD'] ** 0.5).to_timeseries()
+
+		data[ifo]['WR'] = residual
+		data[ifo]['WTPL'] = tpl
 
 		if bp:
 			if print_info:
 				print(' ')
 				print('****************************************************')
 				print('Bandpassing %s-data from %s Hz to %s Hz.' %(ifo, bpf1, bpf2))
-			data[ifo]['WS']._data = filtfilt(b,a,data[ifo]['WS']._data) 
+			strain_tmp = data[ifo]['S'].copy()
+			strain_tmp._data = filtfilt(b,a,data[ifo]['WS']._data) 
 			residual._data = filtfilt(b,a,residual._data)
 			tpl._data = filtfilt(b,a,tpl._data)
-
-		data[ifo]['R'] = residual
-		data[ifo]['TPL'] = tpl
+			data[ifo]['WBPS'] = strain_tmp
+			data[ifo]['WBPR'] = residual
+			data[ifo]['WBPTPL'] = tpl
 
 
 	network_snr = (abs(np.array(max_snr.values())) ** 2.0).sum() ** 0.5
