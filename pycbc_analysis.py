@@ -89,9 +89,9 @@ def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2,f1=f1,f2=f2,
 	
 	""" bla """
 
-	duration = data['H']['WS'].duration
-	sample_rate = data['H']['WS'].sample_rate
-	delta_t = data['H']['WS'].delta_t
+	duration = data['H']['S'].duration
+	sample_rate = data['H']['S'].sample_rate
+	delta_t = data['H']['S'].delta_t
 	delta_f = data['H']['ST'].delta_f
 	nq = float(sample_rate)/2.
 	b, a = butter(4, [float(bpf1)/nq, float(bpf2)/nq], btype = 'bandpass')
@@ -141,6 +141,7 @@ def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2,f1=f1,f2=f2,
 
 		# Find freq. domain residual
 		rtilde = data[ifo]['ST']-tpl
+		data[ifo]['TPLS'] = tpl
 
 		data[ifo]['R'] = rtilde.to_timeseries()
 		data[ifo]['TPL'] = tpl.to_timeseries()
