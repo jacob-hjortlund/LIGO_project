@@ -9,7 +9,7 @@ from pycbc.psd import interpolate, inverse_spectrum_truncation
 from pycbc.waveform import get_td_waveform
 from pycbc.filter import matched_filter
 from pycbc.waveform import apply_fseries_time_shift
-from scipy.signal import butter, filtfilt
+from scipy.signal import butter, filtfilt, boxcar
 
 # Default values
 f_hp = 15
@@ -53,7 +53,7 @@ def read_strain(directory, suffix, win_edge, hp_freq=f_hp, print_info=False):
 
 	return data
 
-def estimate_psd(data, psd_segment_length, low_freq=f1, psd_method='median', psd_window='hann'):
+def estimate_psd(data, psd_segment_length, low_freq=f1, psd_method='median', psd_window='hann', kaiser_beta=14):
 
 	""" Calculate the PSD using a Welch-style estimator, and then interpolate the
 	PSD to the desired frequency step. """
@@ -72,6 +72,14 @@ def estimate_psd(data, psd_segment_length, low_freq=f1, psd_method='median', psd
 		elif psd_window == 'hann':
 			data_tmp[ifo]['PSD'] = interpolate(data_tmp[ifo]['S'].psd(psd_segment_length, 
 			avg_method=psd_method, window=psd_window), data_tmp[ifo]['ST'].delta_f)
+		elif psd_window == 'kaiser':
+			kaiser_window = np.kaiser(psd_segment_length*sample_rate, kaiser_beta)
+			data_tmp[ifo]['PSD'] = interpolate(data_tmp[ifo]['S'].psd(psd_segment_length, 
+			avg_method=psd_method, window=kaiser_window), data_tmp[ifo]['ST'].delta_f)
+		elif psd_window == 'rectangular':
+			rectangular_window = boxcar(psd_segment_length*sample_rate)
+			data_tmp[ifo]['PSD'] = interpolate(data_tmp[ifo]['S'].psd(psd_segment_length, 
+			avg_method=psd_method, window=rectangular_window), data_tmp[ifo]['ST'].delta_f)
 
 		# Smooth to the desired corruption length
 
