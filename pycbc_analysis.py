@@ -20,7 +20,7 @@ m2 = 29.237     # mass 2, LOSC value
 s1 = 0.355      # spin 1, LOSC value
 s2 = -0.769     # spin 2, LOSC value
 
-def read_strain(directory, suffix, win_edge, hp_freq=f_hp, print_info=False):
+def read_strain(directory, suffix, win_edge, hp_freq=f_hp, crop=0, print_info=False):
 
 	""" Load .gwf file, highpass strain data and remove edges using a Tukey window """
 
@@ -30,6 +30,7 @@ def read_strain(directory, suffix, win_edge, hp_freq=f_hp, print_info=False):
 	    fname = directory + '%s-%s1' % (ifo, ifo) + suffix + '.gwf'
 	    channel_name = '%s1:LOSC-STRAIN'  % ifo
 	    data[ifo]['S'] = read_frame(fname, channel_name)
+	    data[ifo]['S'] = data[ifo]['S'].crop(crop, crop)
 
 	    # Initial high pass to remove the strong low-frequency signal
 	    data[ifo]['S'] = highpass(data[ifo]['S'], hp_freq)
