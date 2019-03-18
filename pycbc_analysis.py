@@ -38,7 +38,7 @@ def read_strain(directory, suffix, win_edge, hp_freq=f_hp, crop=0, print_info=Fa
 	    # Tukey window to remove time corrupted by the high pass filter
 	    sample_rate = data[ifo]['S'].sample_rate
 	    duration = int(data[ifo]['S'].duration)
-	    win = tukey(duration*sample_rate, alpha= float(win_edge)/float(duration))
+	    win = tukey(duration*sample_rate, alpha= float(win_edge)*2./float(duration))
 	    data[ifo]['S']._data = data[ifo]['S']._data*win
 	    
 	    # Print some information
@@ -110,7 +110,7 @@ def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2,f1=f1,f2=f2,
 	hp, hc = get_td_waveform(approximant="SEOBNRv4", 
                          mass1=m1, mass2=m2, 
                          spin1z = s1,      spin2z = s2, 
-                         f_lower=f1_tmp, delta_t = data['H']['S'].delta_t)
+                         f_lower=f1, delta_t = data['H']['S'].delta_t)
 	hp1 = hp.copy()
 	# Convert to freq. series
 	len0 = len(hp)
