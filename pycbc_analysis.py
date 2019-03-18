@@ -13,6 +13,7 @@ from scipy.signal import butter, filtfilt, boxcar
 
 # Default values
 f_hp = 15
+tpl_f = 20
 f1 = 43			# Lower frequency for matching
 f2 = 300		# Higher frequency for matching
 m1 = 41.743     # mass 1, LOSC value
@@ -93,7 +94,7 @@ def estimate_psd(data, psd_segment_length, low_freq=f1, psd_method='median', psd
 
 	return data_tmp
 
-def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2,f1=f1,f2=f2,
+def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2,f1=f1,f2=f2, tpl_f=tpl_f,
 					  bp=True, bpf1=f1, bpf2=f2, print_info=False):
 	
 	""" bla """
@@ -105,12 +106,11 @@ def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2,f1=f1,f2=f2,
 	nq = float(sample_rate)/2.
 	b, a = butter(4, [float(bpf1)/nq, float(bpf2)/nq], btype = 'bandpass')
 
-	f1_tmp=20
 	# Find td waveform for increased precision
 	hp, hc = get_td_waveform(approximant="SEOBNRv4", 
                          mass1=m1, mass2=m2, 
                          spin1z = s1,      spin2z = s2, 
-                         f_lower=f1, delta_t = data['H']['S'].delta_t)
+                         f_lower=tpl_f, delta_t = data['H']['S'].delta_t)
 	hp1 = hp.copy()
 	# Convert to freq. series
 	len0 = len(hp)
