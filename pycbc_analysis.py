@@ -105,11 +105,12 @@ def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2,f1=f1,f2=f2,
 	nq = float(sample_rate)/2.
 	b, a = butter(4, [float(bpf1)/nq, float(bpf2)/nq], btype = 'bandpass')
 
+	f1_tmp=20
 	# Find td waveform for increased precision
 	hp, hc = get_td_waveform(approximant="SEOBNRv4", 
                          mass1=m1, mass2=m2, 
                          spin1z = s1,      spin2z = s2, 
-                         f_lower=f1, delta_t = data['H']['S'].delta_t)
+                         f_lower=f1_tmp, delta_t = data['H']['S'].delta_t)
 	hp1 = hp.copy()
 	# Convert to freq. series
 	len0 = len(hp)
