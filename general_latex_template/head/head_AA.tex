@@ -1,0 +1,28 @@
+\def\<{\langle}
+\def\>{\rangle}
+
+\newcommand{\ra}{\;\raise1.0pt\hbox{$'$}\hskip-6pt\partial\;}
+\newcommand{\lo}{\;\overline{\raise1.0pt\hbox{$'$}\hskip-6pt\partial}\;}
+\newcommand{\vdag}{(v)^\dagger}
+\newcommand{\degree}{^\circ}
+\newcommand{\bi}[1]{\mbox{\boldmath $#1$}}
+\newcommand{\blue}{\textcolor[rgb]{0.00,0.00,1.00}}
+\newcommand{\red}{\textcolor[rgb]{1.00,0.00,0.00}}
+
+\newcommand{\aafix}{\textbf}
+\newcommand{\somebody}{\author{somebody}}
+\newcommand{\Abs}{\abstract}
+\newcommand{\Ack}[1]{\begin{acknowledgements} #1 \end{acknowledgements}}
+\newcommand{\mktt}{\maketitle \tableofcontents}
+
+% \documentclass[iop,numberedappendix,twocolappendix,apj,twocolumn]{emulateapj}
+\bibliographystyle{aa}
+\documentclass[onecolumn]{aa}
+
+\usepackage{graphicx,epsfig,natbib,color,times,bm,amsmath,multirow,hyperref}
+
+\makeatletter
+\renewcommand*\aa@pageof{, page \thepage{} of \pageref*{LastPage}}
+\makeatother
+
+\hypersetup{linktocpage}

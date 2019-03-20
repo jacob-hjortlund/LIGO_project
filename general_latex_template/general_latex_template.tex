@@ -1,0 +1,88 @@
+% \input{head/head_PRL}
+\input{head/head_JCAP}
+% \input{head/head_APJ}
+% \input{head/head_AA}
+
+
+%*************************************************
+% Enable this line to filter out the unused figures (will be done by "copy_used_fig.pro")
+%*************************************************
+% \usepackage{snapshot}
+
+
+%*************************************************
+% Enable this line for debug when there is an error like:
+% "\pdfendlink ended up in different nesting level than \pdfstartlink.", 
+%*************************************************
+% \hypersetup{draft}
+
+
+%*************************************************
+% Start the paper
+%*************************************************
+\begin{document}
+
+
+%*************************************************
+% The title
+%*************************************************
+\title{A general template for JCAP/PRL/APJ}
+
+
+% Use "somebody" as the temporary author when the paper is being prepared.
+% When the paper is finalized, run the IDL program set_author.pro to get the author text, e.g.: 
+% set_author,['Tom','Jerry','Cat','Mouse'], /jcap 
+\somebody
+
+
+% Abstract
+\Abs{
+***Insert the abstract Here***
+\cite{liu_fingerprints_2014}
+}
+
+\mktt
+
+
+%*************************************************
+% Start sections
+%*************************************************
+\section{The first section}\label{sec:}
+
+[***Content of the first section***]
+
+
+% test figure
+% \begin{figure*}[!htb]
+%   \centering
+%   \includegraphics[width=0.48\textwidth]{./figure/aaa.pdf}
+%   \includegraphics[width=0.48\textwidth]{./figure/bbb.pdf}
+
+%   \includegraphics[width=0.48\textwidth]{./figure/ccc.pdf}
+%   \includegraphics[width=0.48\textwidth]{./figure/ddd.pdf}
+%   \caption{A test figure}
+%   \label{fig:a test figure}
+% \end{figure*}
+
+%*************************************************
+% Acknowledgments
+%*************************************************
+% \Ack{
+% [***Add acknowledgements here***] 
+% }
+
+
+%*************************************************
+% Appendix
+%*************************************************
+% \appendix
+% \section{Some appendix}\label{app:}
+% [***Add appendix here***]
+
+
+%*************************************************
+% bibliography
+%*************************************************
+\bibliography{newbib}
+
+\end{document}
