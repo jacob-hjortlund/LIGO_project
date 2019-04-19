@@ -100,7 +100,7 @@ def estimate_psd(data, psd_segment_length, low_freq=f1, psd_method='median', psd
 	return data_tmp
 
 def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2,f1=f1,f2=f2, tpl_f=tpl_f,
-					  bp=True, bpf1=f1, bpf2=f2, print_info=False):
+					  bp=True, bpf1=f1, bpf2=f2, print_info=False, approximant='SEOBNRv4'):
 	
 	""" bla """
 
@@ -112,7 +112,7 @@ def matched_filtering(data, m1=m1,m2=m2,s1=s1,s2=s2,f1=f1,f2=f2, tpl_f=tpl_f,
 	b, a = butter(4, [float(bpf1)/nq, float(bpf2)/nq], btype = 'bandpass')
 
 	# Find td waveform for increased precision
-	hp, hc = get_td_waveform(approximant="SEOBNRv4", 
+	hp, hc = get_td_waveform(approximant=approximant, 
                          mass1=m1, mass2=m2, 
                          spin1z = s1,      spin2z = s2, 
                          f_lower=tpl_f, delta_t = data['H']['S'].delta_t)
