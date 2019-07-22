@@ -33,13 +33,12 @@ def read_strain(directory, suffix, win_edge, hp_freq=f_hp, crop_left=0, crop_rig
 	    	channel_name = '%s1:LOSC-STRAIN'  % ifo
 	    else:
 	    	channel_name = '%s1:GWOSC-4KHZ_R1_STRAIN' % ifo
-	    print(fname)
-	    print(channel_name)
 	    data[ifo]['S'] = read_frame(fname, channel_name)
 	    data[ifo]['S'] = data[ifo]['S'].crop(crop_left, crop_right)
 
 	    # Initial high pass to remove the strong low-frequency signal
-	    data[ifo]['S'] = highpass(data[ifo]['S'], hp_freq)
+	    if hp_freq != 0:
+	    	data[ifo]['S'] = highpass(data[ifo]['S'], hp_freq)
 
 	    # Tukey window to remove time corrupted by the high pass filter
 	    sample_rate = data[ifo]['S'].sample_rate
